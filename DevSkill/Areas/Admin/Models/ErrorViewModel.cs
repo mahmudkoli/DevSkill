@@ -1,6 +1,6 @@
 using System;
 
-namespace DevSkill.Area.Admin.Models
+namespace DevSkill.Areas.Admin.Models
 {
     public class ErrorViewModel
     {

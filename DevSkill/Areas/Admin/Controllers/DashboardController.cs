@@ -5,23 +5,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using DevSkill.Models;
+using DevSkill.Areas.Admin.Models;
 
 namespace DevSkill.Area.Admin.Controllers
 {
     [Area("Admin")]
-    public class HomeController : Controller
+    public class DashboardController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<DashboardController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public DashboardController(ILogger<DashboardController> logger)
         {
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var model = new DashboardModel();
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

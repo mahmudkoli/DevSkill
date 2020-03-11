@@ -1,4 +1,5 @@
-﻿
+﻿@model MenuModel
+
 <div class="sidebar sidebar-dark sidebar-main sidebar-fixed sidebar-expand-md">
 
     <!-- Sidebar mobile toggler -->
@@ -44,26 +45,18 @@
 
                 <!-- Main -->
                 <li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Main</div> <i class="icon-menu" title="Main"></i></li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link active">
-                        <i class="icon-home4"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link"><i class="icon-stack"></i> <span>Starter kit</span></a>
 
-                    <ul class="nav nav-group-sub" data-submenu-title="Starter kit">
-                        <li class="nav-item"><a href="#" class="nav-link">1 sidebar</a></li>
-                        <li class="nav-item nav-item-submenu">
-                            <a href="#" class="nav-link">2 sidebars</a>
-                            <ul class="nav nav-group-sub">
-                                <li class="nav-item"><a href="#" class="nav-link">Secondary sidebar</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Right sidebar</a></li>
-                            </ul>
+                @{
+                    foreach (var menu in Model.MenuList)
+                    {
+                        <li class="nav-item">
+                            <a asp-area="@menu.Area" asp-controller="@menu.Controller" asp-action="@menu.Action" class="nav-link @(menu.IsActive ? "active" : "")">
+                                <i class="@menu.IconText"></i>
+                                <span>@menu.DisplayText</span>
+                            </a>
                         </li>
-                    </ul>
-                </li>
+                    }
+                }
                 <!-- /main -->
 
             </ul>

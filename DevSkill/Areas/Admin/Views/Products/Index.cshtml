@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+@section styles {
+    <link href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+}
+
+<!-- Page header -->
+<div class="page-header">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4><i class="icon-arrow-left52 mr-2"></i> <span class="font-weight-semibold">Starters</span> - Fixed Layout</h4>
+            <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+        </div>
+
+        <div class="header-elements d-none text-center text-md-left mb-3 mb-md-0">
+            <a href="#" class="btn btn-labeled btn-labeled-right bg-primary">Button <b><i class="icon-menu7"></i></b></a>
+        </div>
+    </div>
+</div>
+<!-- /page header -->
+<!-- Content area -->
+<div class="content pt-0">
+
+    <!-- Basic datatable -->
+    <div class="card">
+        <div class="card-header header-elements-inline">
+            <h5 class="card-title">Product datatable</h5>
+            <div class="header-elements">
+                <div class="list-icons">
+                    <a class="list-icons-item" data-action="collapse"></a>
+                    <a class="list-icons-item" data-action="reload"></a>
+                    <a class="list-icons-item" data-action="remove"></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+
+        </div>
+
+        <table id="product-table" class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <!-- /basic datatable -->
+</div>
+
+@section scripts {
+    <!-- Theme JS files -->
+    <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+    <script src="~/theme/assets/js/app.js"></script>
+    <!-- /theme JS files -->
+    <script>
+        $(function () {
+            $('#product-table').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "@Url.Action("GetProducts", "Products", new { Area = "Admin" })"
+            });
+        });
+    </script>
+}

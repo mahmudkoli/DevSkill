@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model AdminBaseModel
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -15,14 +16,7 @@
     <link href="~/theme/assets/css/components.min.css" rel="stylesheet" type="text/css">
     <link href="~/theme/assets/css/colors.min.css" rel="stylesheet" type="text/css">
     <!-- /global stylesheets -->
-    <!-- Core JS files -->
-    <script src="~/theme/global_assets/js/main/jquery.min.js"></script>
-    <script src="~/theme/global_assets/js/main/bootstrap.bundle.min.js"></script>
-    <script src="~/theme/global_assets/js/plugins/loaders/blockui.min.js"></script>
-    <!-- /core JS files -->
-    <!-- Theme JS files -->
-    <script src="~/theme/assets/js/app.js"></script>
-    <!-- /theme JS files -->
+    @RenderSection("Styles", false)
 
 </head>
 
@@ -127,7 +121,7 @@
     <div class="page-content">
 
         <!-- Main sidebar -->
-        <partial name="_MainSidebarPartial" />
+        <partial name="_MainSidebarPartial" model="@Model.MenuModel" />
         <!-- /main sidebar -->
         <!-- Main content -->
         <div class="content-wrapper">
@@ -144,6 +138,11 @@
     </div>
     <!-- /page content -->
 
+    <!-- Core JS files -->
+    <script src="~/theme/global_assets/js/main/jquery.min.js"></script>
+    <script src="~/theme/global_assets/js/main/bootstrap.bundle.min.js"></script>
+    <script src="~/theme/global_assets/js/plugins/loaders/blockui.min.js"></script>
+    <!-- /core JS files -->
     @RenderSection("Scripts", required: false)
 </body>
 </html>
