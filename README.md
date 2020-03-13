@@ -1,14 +1,14 @@
 # Store Procedure
 
 
-ALTER PROCEDURE [dbo].[spProducts_GetAll]
-	@PageIndex int = 1,
-	@PageSize int = 10, 
-	@OrderBy nvarchar(50) = 'Name',
-	@OrderDir nvarchar(4) = 'asc',
-	@SearchText nvarchar(250) = NULL,
-	@TotalCount int OUTPUT,
-	@FilteredCount int OUTPUT
+	CREATE PROCEDURE [dbo].[spProducts_GetAll]
+		@PageIndex int = 1,
+		@PageSize int = 10, 
+		@OrderBy nvarchar(50) = 'Name',
+		@OrderDir nvarchar(4) = 'asc',
+		@SearchText nvarchar(250) = NULL,
+		@TotalCount int OUTPUT,
+		@FilteredCount int OUTPUT
 
 	AS
 	BEGIN
