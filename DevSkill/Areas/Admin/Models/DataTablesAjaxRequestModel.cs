@@ -95,12 +95,5 @@ namespace DevSkill.Areas.Admin.Models
             }
             return sortText.ToString();
         }
-
-        public (string OrderBy, string OrderDir) GetOrder(string[] columnNames)
-        {
-            var column = int.Parse(_request.Query[$"order[0][column]"]);
-            var direction = _request.Query[$"order[0][dir]"].ToString();
-            return (columnNames[column], direction);
-        }
     }
 }
