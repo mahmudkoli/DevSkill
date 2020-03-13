@@ -30,5 +30,13 @@ namespace DevSkill.Framework
 
             return (filteredProductList, totalProducts, filteredProductsCount);
         }
+
+        public (IList<Product> records, int total, int totalFiltered) GetProductsByStoreProc(int pageIndex, int pageSize, string searchText, string orderBy, string orderDir)
+        {
+            using var dbProvider = new SqlServerDataProvider<Product>(_connectionString);
+            var result = dbProvider.GetDataByStoreProc(pageIndex, pageSize, searchText, orderBy, orderDir);
+
+            return (result.records, result.total, result.totalFiltered);
+        }
     }
 }

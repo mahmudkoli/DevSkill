@@ -39,5 +39,31 @@ namespace DevSkill.Areas.Admin.Models
 
             };
         }
+
+        public object GetProductsByStoreProc(DataTablesAjaxRequestModel tableModel)
+        {
+            var order = tableModel.GetOrder(new string[] { "Name", "Description", "Price" });
+            var data = _productService.GetProductsByStoreProc(
+                tableModel.PageIndex,
+                tableModel.PageSize,
+                tableModel.SearchText,
+                order.OrderBy,
+                order.OrderDir);
+
+            return new
+            {
+                recordsTotal = data.total,
+                recordsFiltered = data.totalFiltered,
+                data = (from record in data.records
+                        select new string[]
+                        {
+                                record.Name,
+                                record.Description,
+                                record.Price.ToString(),
+                        }
+                    ).ToArray()
+
+            };
+        }
     }
 }

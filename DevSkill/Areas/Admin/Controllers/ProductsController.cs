@@ -27,7 +27,7 @@ namespace DevSkill.Areas.Admin.Controllers
         {
             var tableModel = new DataTablesAjaxRequestModel(Request);
             var model = new ProductsModel(_configuration);
-            var data = model.GetProducts(tableModel);
+            var data = model.GetProductsByStoreProc(tableModel);
             return Json(data);
         }
     }
