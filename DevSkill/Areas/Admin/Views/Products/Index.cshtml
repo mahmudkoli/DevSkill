@@ -39,17 +39,18 @@
 
         <div class="card-body">
 
-        </div>
+            <table id="product-table" class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
 
-        <table id="product-table" class="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-        </table>
+        </div>
     </div>
     <!-- /basic datatable -->
 </div>
@@ -65,7 +66,21 @@
             $('#product-table').DataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "@Url.Action("GetProducts", "Products", new { Area = "Admin" })"
+                "ajax": "@Url.Action("GetProducts", "Products", new { Area = "Admin" })",
+                "columnDefs": [
+                    {
+                        "targets": [ 0 ],
+                        "orderData": [ 0, 1 ]
+                    },
+                    {
+                        "targets": [ 1 ],
+                        "orderData": [ 1, 0 ]
+                    },
+                    {
+                        "targets": [ 2 ],
+                        "orderData": [ 2 ]
+                    }
+                ]
             });
         });
     </script>

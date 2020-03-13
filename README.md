@@ -2,6 +2,7 @@
 
 
 	
+	
 	ALTER PROCEDURE [dbo].[spProducts_GetAll]
 		@PageIndex int = 1,
 		@PageSize int = 10, 
@@ -20,13 +21,13 @@
 
 			SET NOCOUNT ON;
 
-			SET @sql = 'SELECT Pro.Id as Id, Pro.Name as Name, Pro.Description as Description, 
-						Pro.Price as Price FROM Products as Pro'
+			SET @sql = 'SELECT Id, Name, Description, 
+						Price FROM Products'
 
-			SET @countSql = 'SELECT @FilteredCount = COUNT(*) FROM Products as Pro'
+			SET @countSql = 'SELECT @FilteredCount = COUNT(*) FROM Products'
 			
-			SET @conditionSql = ' WHERE LOWER(Pro.Name) LIKE LOWER(''%''+@SearchText+''%'') 
-								OR LOWER(Pro.Description) LIKE LOWER(''%''+@SearchText+''%'')'
+			SET @conditionSql = ' WHERE LOWER(Name) LIKE LOWER(''%''+@SearchText+''%'') 
+								OR LOWER(Description) LIKE LOWER(''%''+@SearchText+''%'')'
 
 			IF @PageIndex < 1
 				SET @PageIndex = 1
@@ -37,7 +38,7 @@
 			SET @sql += @conditionSql
 			SET @countSql += @conditionSql
 	
-			SET @sql += ' ORDER BY Pro.' + @OrderBy + ' OFFSET @PageSize * (@PageIndex - 1) 
+			SET @sql += ' ORDER BY ' + @OrderBy + ' OFFSET @PageSize * (@PageIndex - 1) 
 						ROWS FETCH NEXT @PageSize ROWS ONLY'
 
 			SELECT @paramlist = '@SearchText nvarchar(250),
@@ -61,5 +62,7 @@
 					@FilteredCount = @FilteredCount OUTPUT
 	
 		END
+
+
 
 

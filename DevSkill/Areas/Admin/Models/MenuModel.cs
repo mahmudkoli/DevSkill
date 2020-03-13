@@ -16,7 +16,7 @@ namespace DevSkill.Areas.Admin.Models
                     new MenuOption () { Controller = "Dashboard", Action = "Index", DisplayText = "Dashboard", 
                         IconText = "icon-home4", IsActive = false },
                     new MenuOption () { Controller = "Products", Action = "Index", DisplayText = "Product", 
-                        IconText = "icon-home4", IsActive = true }
+                        IconText = "icon-home4", IsActive = false }
                 };
             }
         }
