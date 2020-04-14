@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevSkill.Web", "DevSkill.Web\DevSkill.Web.csproj", "{C20788CF-A4AA-4091-9CF7-EE99966A4A16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevSkill.Web", "DevSkill.Web\DevSkill.Web.csproj", "{C20788CF-A4AA-4091-9CF7-EE99966A4A16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevSkill.Data", "DevSkill.Data\DevSkill.Data.csproj", "{C5B351C8-6943-4296-8584-1C943A5ABA9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevSkill.Training", "DevSkill.Training\DevSkill.Training.csproj", "{E987004C-4A72-497E-9838-48C3D97CBA7C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{C20788CF-A4AA-4091-9CF7-EE99966A4A16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C20788CF-A4AA-4091-9CF7-EE99966A4A16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C20788CF-A4AA-4091-9CF7-EE99966A4A16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5B351C8-6943-4296-8584-1C943A5ABA9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5B351C8-6943-4296-8584-1C943A5ABA9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5B351C8-6943-4296-8584-1C943A5ABA9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5B351C8-6943-4296-8584-1C943A5ABA9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E987004C-4A72-497E-9838-48C3D97CBA7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E987004C-4A72-497E-9838-48C3D97CBA7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E987004C-4A72-497E-9838-48C3D97CBA7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E987004C-4A72-497E-9838-48C3D97CBA7C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
