@@ -1,4 +1,5 @@
-﻿
+﻿@model AdminBaseModel
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,7 +31,7 @@
     <div class="page-content">
 
         <!-- Main sidebar -->
-        <partial name="_SideBarPartial" />
+        <partial name="_SideBarPartial" model="@Model.MenuModel" />
         <!-- /main sidebar -->
         <!-- Main content -->
         <div class="content-wrapper">
@@ -55,10 +56,48 @@
     <script src="~/theme/global_assets/js/plugins/notifications/noty.min.js"></script>
     <script src="~/theme/assets/js/app.js"></script>
     <!-- /theme JS files -->
-
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip({ 'placement': 'bottom' })
+        })
+    </script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 
+    @if (TempData["ErrorNotify"] != null)
+    {
+        <script>
+            new Noty({
+                text: '@TempData["ErrorNotify"].ToString()',
+                type: 'error',
+                modal: true,
+                theme: ' alert alert-danger alert-styled-left p-0',
+                closeWith: ['button']
+            }).show();
+        </script>
+    }
+    @if (TempData["SuccessNotify"] != null)
+    {
+        <script>
+            new Noty({
+                text: '@TempData["SuccessNotify"].ToString()',
+                type: 'success',
+                theme: ' alert alert-success alert-styled-left p-0',
+                closeWith: ['button']
+            }).show();
+        </script>
+    }
+    @if (TempData["InfoNotify"] != null)
+    {
+        <script>
+            new Noty({
+                text: '@TempData["InfoNotify"].ToString()',
+                type: 'info',
+                theme: ' alert alert-info alert-styled-left p-0',
+                closeWith: ['button']
+            }).show();
+        </script>
+    }
 </body>
 </html>
 

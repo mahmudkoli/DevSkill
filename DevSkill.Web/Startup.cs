@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Autofac;
 using DevSkill.Training;
 using DevSkill.Training.Context;
+using Autofac.Extensions.DependencyInjection;
 
 namespace DevSkill.Web
 {
@@ -33,7 +34,7 @@ namespace DevSkill.Web
 
         public IConfigurationRoot Configuration { get; private set; }
 
-        public ILifetimeScope AutofacContainer { get; private set; }
+        public static ILifetimeScope AutofacContainer { get; private set; }
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
@@ -73,6 +74,8 @@ namespace DevSkill.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            AutofacContainer = app.ApplicationServices.GetAutofacRoot();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

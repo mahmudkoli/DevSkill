@@ -1,0 +1,61 @@
+﻿@model StudentModel
+
+<div class="">
+    <form asp-action="AddOrEdit" id="student-form">
+        <div class="">
+            <fieldset class="mb-3">
+
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-form-label col-lg-4 required" asp-for="Name"></label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" asp-for="Name">
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-lg-4 required" asp-for="DateOfBirth"></label>
+                            <div class="col-lg-8">
+                                <div class="input-group">
+                                    <input type="text" class="form-control pickadate-accessibility" placeholder="Select Date" asp-for="DateOfBirth">
+                                    <span class="input-group-append">
+                                        <span class="input-group-text"><i class="icon-calendar22"></i></span>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </fieldset>
+
+        </div>
+        <div class="">
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-light" data-dismiss="modal"><i class="icon-close2"></i> Close</button>
+                <button type="submit" class="btn bg-teal ml-2"><i class="icon-file-check2"></i> Save</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+<script>
+    $.validator.unobtrusive.parse("#student-form");
+    // Accessibility labels
+    $('.pickadate-accessibility').pickadate({
+        labelMonthNext: 'Go to the next month',
+        labelMonthPrev: 'Go to the previous month',
+        labelMonthSelect: 'Pick a month from the dropdown',
+        labelYearSelect: 'Pick a year from the dropdown',
+        selectMonths: true,
+        selectYears: true
+    });
+</script>

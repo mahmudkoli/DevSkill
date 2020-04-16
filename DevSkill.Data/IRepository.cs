@@ -10,23 +10,28 @@ namespace DevSkill.Data
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        void Add(TEntity entity);
-        void Edit(TEntity entityToUpdate);
-        IList<TResult> Get<TResult>(Expression<Func<TEntity, TResult>> selector,
+        Task AddAsync(TEntity entity);
+        Task UpdateAsync(TEntity entityToUpdate);
+        Task<IList<TResult>> GetAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
                             Expression<Func<TEntity, bool>> predicate = null,
                             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
                             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
                             bool disableTracking = true);
-        (IList<TResult> Items, int Total, int TotalDisplay) Get<TResult>(Expression<Func<TEntity, TResult>> selector,
+        Task<(IList<TResult> Items, int Total, int TotalDisplay)> GetAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
                             Expression<Func<TEntity, bool>> predicate = null,
                             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
                             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
                             int pageIndex = 1, int pageSize = 10,
                             bool disableTracking = true);
-        TEntity GetById(int id);
-        int GetCount(Expression<Func<TEntity, bool>> filter = null);
-        void Remove(Expression<Func<TEntity, bool>> filter);
-        void Remove(int id);
-        void Remove(TEntity entityToDelete);
+        Task<TResult> FirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
+                            Expression<Func<TEntity, bool>> predicate = null,
+                            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
+                            bool disableTracking = true);
+        Task<bool> IsExistsAsync(Expression<Func<TEntity, bool>> filter);
+        Task<TEntity> GetByIdAsync(int id);
+        Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filter = null);
+        Task RemoveAsync(Expression<Func<TEntity, bool>> filter);
+        Task RemoveAsync(int id);
+        Task RemoveAsync(TEntity entityToDelete);
     }
 }

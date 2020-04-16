@@ -9,6 +9,6 @@ namespace DevSkill.Data
 {
     public interface IUnitOfWork<TEntity> : IDisposable where TEntity : DbContext
     {
-        void Save();
+        Task SaveChangesAsync();
     }
 }

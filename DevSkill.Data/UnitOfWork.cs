@@ -16,6 +16,6 @@ namespace DevSkill.Data
 
         public void Dispose() => _dbContext?.Dispose();
 
-        public void Save() => _dbContext?.SaveChanges();
+        public Task SaveChangesAsync() => _dbContext?.SaveChangesAsync();
     }
 }

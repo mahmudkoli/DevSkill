@@ -20,24 +20,21 @@ namespace DevSkill.Data
             _dbSet = _dbContext.Set<TEntity>();
         }
 
-        public virtual void Add(TEntity entity) => _dbSet.Add(entity);
+        public virtual async Task AddAsync(TEntity entity) => await _dbSet.AddAsync(entity);
 
-        public virtual void Edit(TEntity entityToUpdate)
+        public virtual async Task UpdateAsync(TEntity entityToUpdate)
         {
             _dbSet.Attach(entityToUpdate);
             _dbContext.Entry(entityToUpdate).State = EntityState.Modified;
         }
 
-        public virtual IList<TResult> Get<TResult>(Expression<Func<TEntity, TResult>> selector,
+        public virtual async Task<IList<TResult>> GetAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
                             Expression<Func<TEntity, bool>> predicate = null,
                             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
                             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
                             bool disableTracking = true)
         {
             IQueryable<TEntity> query = _dbSet.AsQueryable();
-
-            if (disableTracking)
-                query = query.AsNoTracking();
 
             if (include != null)
                 query = include(query);
@@ -46,12 +43,17 @@ namespace DevSkill.Data
                 query = query.Where(predicate);
 
             if (orderBy != null)
-                return orderBy(query).Select(selector).ToList();
-            else
-                return query.Select(selector).ToList();
+                query = orderBy(query);
+
+            if (disableTracking)
+                query = query.AsNoTracking();
+
+            var result = await query.Select(selector).ToListAsync();
+
+            return result;
         }
 
-        public virtual (IList<TResult> Items, int Total, int TotalDisplay) Get<TResult>(Expression<Func<TEntity, TResult>> selector,
+        public virtual async Task<(IList<TResult> Items, int Total, int TotalDisplay)> GetAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
                             Expression<Func<TEntity, bool>> predicate = null,
                             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
                             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
@@ -59,11 +61,8 @@ namespace DevSkill.Data
                             bool disableTracking = true)
         {
             IQueryable<TEntity> query = _dbSet.AsQueryable();
-            int total = query.Count();
+            int total = await query.CountAsync();
             int totalDisplay = total;
-
-            if (disableTracking)
-                query = query.AsNoTracking();
 
             if (include != null)
                 query = include(query);
@@ -71,21 +70,54 @@ namespace DevSkill.Data
             if (predicate != null)
             {
                 query = query.Where(predicate);
-                totalDisplay = query.Count();
+                totalDisplay = await query.CountAsync();
             }
 
             if (orderBy != null)
                 query = orderBy(query);
 
-            return (query.Skip((pageIndex - 1) * pageSize).Take(pageSize).Select(selector).ToList(), total, totalDisplay);
+            if (disableTracking)
+                query = query.AsNoTracking();
+
+            var result = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).Select(selector).ToListAsync();
+
+            return (result, total, totalDisplay);
         }
 
-        public virtual TEntity GetById(int id)
+        public virtual async Task<TResult> FirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
+                            Expression<Func<TEntity, bool>> predicate = null,
+                            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
+                            bool disableTracking = true)
         {
-            return _dbSet.Find(id);
+            IQueryable<TEntity> query = _dbSet.AsQueryable();
+
+            if (include != null)
+                query = include(query);
+
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            if (disableTracking)
+                query = query.AsNoTracking();
+
+            var result = await query.Select(selector).FirstOrDefaultAsync();
+
+            return result;
         }
 
-        public virtual int GetCount(Expression<Func<TEntity, bool>> filter = null)
+        public virtual async Task<bool> IsExistsAsync(Expression<Func<TEntity, bool>> filter)
+        {
+            var query = _dbSet.AsQueryable();
+
+            return await query.AnyAsync(filter);
+        }
+
+        public virtual async Task<TEntity> GetByIdAsync(int id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
+
+        public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filter = null)
         {
             var query = _dbSet.AsQueryable();
 
@@ -94,16 +126,16 @@ namespace DevSkill.Data
                 query = query.Where(filter);
             }
 
-            return query.Count();
+            return await query.CountAsync();
         }
 
-        public virtual void Remove(int id)
+        public virtual async Task RemoveAsync(int id)
         {
-            var entityToDelete = _dbSet.Find(id);
-            Remove(entityToDelete);
+            var entityToDelete = await _dbSet.FindAsync(id);
+            await RemoveAsync(entityToDelete);
         }
 
-        public virtual void Remove(TEntity entityToDelete)
+        public virtual async Task RemoveAsync(TEntity entityToDelete)
         {
             if (_dbContext.Entry(entityToDelete).State == EntityState.Detached)
             {
@@ -112,6 +144,6 @@ namespace DevSkill.Data
             _dbSet.Remove(entityToDelete);
         }
 
-        public virtual void Remove(Expression<Func<TEntity, bool>> filter) => _dbSet.RemoveRange(_dbSet.Where(filter));
+        public virtual async Task RemoveAsync(Expression<Func<TEntity, bool>> filter) => _dbSet.RemoveRange(_dbSet.Where(filter));
     }
 }
