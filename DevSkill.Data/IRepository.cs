@@ -10,8 +10,6 @@ namespace DevSkill.Data
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        Task AddAsync(TEntity entity);
-        Task UpdateAsync(TEntity entityToUpdate);
         Task<IList<TResult>> GetAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
                             Expression<Func<TEntity, bool>> predicate = null,
                             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
@@ -27,11 +25,13 @@ namespace DevSkill.Data
                             Expression<Func<TEntity, bool>> predicate = null,
                             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
                             bool disableTracking = true);
-        Task<bool> IsExistsAsync(Expression<Func<TEntity, bool>> filter);
-        Task<TEntity> GetByIdAsync(int id);
+        Task<TEntity> GetByIdAsync(params object[] ids);
         Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filter = null);
-        Task RemoveAsync(Expression<Func<TEntity, bool>> filter);
-        Task RemoveAsync(int id);
-        Task RemoveAsync(TEntity entityToDelete);
+        Task<bool> IsExistsAsync(Expression<Func<TEntity, bool>> filter);
+        Task AddAsync(TEntity entity);
+        Task UpdateAsync(TEntity entityToUpdate);
+        Task DeleteAsync(Expression<Func<TEntity, bool>> filter);
+        Task DeleteAsync(object id);
+        Task DeleteAsync(TEntity entityToDelete);
     }
 }

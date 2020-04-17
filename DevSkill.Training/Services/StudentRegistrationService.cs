@@ -32,7 +32,7 @@ namespace DevSkill.Training.Services
 
             var result = await _courseUnitOfWork.StudentRegistrationRepository.GetAsync<StudentRegistration>(
                 x => x, x => x.Student.Name.Contains(searchText) || x.Course.Title.Contains(searchText),
-                x => IQueryableExtension.ApplyOrdering(x, columnsMap, orderBy),
+                x => x.ApplyOrdering(columnsMap, orderBy),
                 x => x.Include(y => y.Student).Include(y => y.Course),
                 pageIndex, pageSize, true);
 
@@ -41,7 +41,7 @@ namespace DevSkill.Training.Services
 
         public async Task<StudentRegistration> GetByIdAsync(int studentId, int courseId)
         {
-            return await _courseUnitOfWork.StudentRegistrationRepository.GetFirstOrDefaultAsync(x => x, x => x.StudentId == studentId && x.CourseId == courseId);
+            return await _courseUnitOfWork.StudentRegistrationRepository.GetByIdAsync(studentId, courseId);
         }
 
         public async Task<IList<object>> GetStudentsForSelectAsync()
@@ -79,7 +79,7 @@ namespace DevSkill.Training.Services
 
         public async Task DeleteAsync(int studentId, int courseId)
         {
-            await _courseUnitOfWork.StudentRegistrationRepository.RemoveAsync(x => x.StudentId == studentId && x.CourseId == courseId);
+            await _courseUnitOfWork.StudentRegistrationRepository.DeleteAsync(x => x.StudentId == studentId && x.CourseId == courseId);
             await _courseUnitOfWork.SaveChangesAsync();
         }
     }

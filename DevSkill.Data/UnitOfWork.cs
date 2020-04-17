@@ -14,8 +14,9 @@ namespace DevSkill.Data
         public UnitOfWork(string connectionString, string migrationAssemblyName)
             => _dbContext = (TEntity)Activator.CreateInstance(typeof(TEntity), connectionString, migrationAssemblyName);
 
-        public void Dispose() => _dbContext?.Dispose();
-
+        public void SaveChanges() => _dbContext?.SaveChanges();
         public Task SaveChangesAsync() => _dbContext?.SaveChangesAsync();
+
+        public void Dispose() => _dbContext?.Dispose();
     }
 }

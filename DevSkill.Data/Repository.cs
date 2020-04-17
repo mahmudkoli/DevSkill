@@ -20,14 +20,6 @@ namespace DevSkill.Data
             _dbSet = _dbContext.Set<TEntity>();
         }
 
-        public virtual async Task AddAsync(TEntity entity) => await _dbSet.AddAsync(entity);
-
-        public virtual async Task UpdateAsync(TEntity entityToUpdate)
-        {
-            _dbSet.Attach(entityToUpdate);
-            _dbContext.Entry(entityToUpdate).State = EntityState.Modified;
-        }
-
         public virtual async Task<IList<TResult>> GetAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
                             Expression<Func<TEntity, bool>> predicate = null,
                             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
@@ -61,6 +53,7 @@ namespace DevSkill.Data
                             bool disableTracking = true)
         {
             IQueryable<TEntity> query = _dbSet.AsQueryable();
+
             int total = await query.CountAsync();
             int totalDisplay = total;
 
@@ -105,16 +98,9 @@ namespace DevSkill.Data
             return result;
         }
 
-        public virtual async Task<bool> IsExistsAsync(Expression<Func<TEntity, bool>> filter)
+        public virtual async Task<TEntity> GetByIdAsync(params object[] ids)
         {
-            var query = _dbSet.AsQueryable();
-
-            return await query.AnyAsync(filter);
-        }
-
-        public virtual async Task<TEntity> GetByIdAsync(int id)
-        {
-            return await _dbSet.FindAsync(id);
+            return await _dbSet.FindAsync(ids);
         }
 
         public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filter = null)
@@ -129,21 +115,49 @@ namespace DevSkill.Data
             return await query.CountAsync();
         }
 
-        public virtual async Task RemoveAsync(int id)
+        public virtual async Task<bool> IsExistsAsync(Expression<Func<TEntity, bool>> filter)
         {
-            var entityToDelete = await _dbSet.FindAsync(id);
-            await RemoveAsync(entityToDelete);
+            var query = _dbSet.AsQueryable();
+
+            return await query.AnyAsync(filter);
         }
 
-        public virtual async Task RemoveAsync(TEntity entityToDelete)
+        public virtual async Task AddAsync(TEntity entity)
+        {
+            await _dbSet.AddAsync(entity);
+        }
+
+        public virtual async Task UpdateAsync(TEntity entityToUpdate)
+        {
+            _dbSet.Attach(entityToUpdate);
+            _dbContext.Entry(entityToUpdate).State = EntityState.Modified;
+        }
+
+        public virtual async Task DeleteAsync(object id)
+        {
+            var entityToDelete = await _dbSet.FindAsync(id);
+
+            await DeleteAsync(entityToDelete);
+        }
+
+        public virtual async Task DeleteAsync(TEntity entityToDelete)
         {
             if (_dbContext.Entry(entityToDelete).State == EntityState.Detached)
             {
                 _dbSet.Attach(entityToDelete);
             }
+
             _dbSet.Remove(entityToDelete);
         }
 
-        public virtual async Task RemoveAsync(Expression<Func<TEntity, bool>> filter) => _dbSet.RemoveRange(_dbSet.Where(filter));
+        public virtual async Task DeleteAsync(Expression<Func<TEntity, bool>> filter)
+        {
+            var query = _dbSet.AsQueryable().Where(filter);
+
+            if (query.Any())
+            {
+                _dbSet.RemoveRange(query);
+            }
+        }
     }
 }

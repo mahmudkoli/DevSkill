@@ -9,7 +9,7 @@ namespace DevSkill.Data.Extensions
 {
     public static class IQueryableExtension
     {
-        public static IOrderedQueryable<TEntity> ApplyOrdering<TEntity>(IQueryable<TEntity> query, Dictionary<string, Expression<Func<TEntity, object>>> columnsMap, string multipleSortBy)
+        public static IOrderedQueryable<TEntity> ApplyOrdering<TEntity>(this IQueryable<TEntity> query, Dictionary<string, Expression<Func<TEntity, object>>> columnsMap, string multipleSortBy)
         {
             IOrderedQueryable<TEntity> orderedQuery = (IOrderedQueryable<TEntity>)query;
             var orderByList = multipleSortBy.Split(',');
@@ -40,15 +40,17 @@ namespace DevSkill.Data.Extensions
             return orderedQuery;
         }
 
-        public static IQueryable<TEntity> ApplyOrdering<TEntity>(this IQueryable<TEntity> query, Dictionary<string, Expression<Func<TEntity, object>>> columnsMap, string sortBy, bool isAsc = true)
+        public static IOrderedQueryable<TEntity> ApplyOrdering<TEntity>(this IQueryable<TEntity> query, Dictionary<string, Expression<Func<TEntity, object>>> columnsMap, string sortBy, bool isAsc = true)
         {
+            IOrderedQueryable<TEntity> orderedQuery = (IOrderedQueryable<TEntity>)query;
+
             if (string.IsNullOrEmpty(sortBy) || columnsMap == null || !columnsMap.ContainsKey(sortBy))
-                return query;
+                return orderedQuery;
 
             if (isAsc)
-                return query.OrderBy(columnsMap[sortBy]);
+                return orderedQuery.OrderBy(columnsMap[sortBy]);
             else
-                return query.OrderByDescending(columnsMap[sortBy]);
+                return orderedQuery.OrderByDescending(columnsMap[sortBy]);
         }
 
         public static IQueryable<TEntity> ApplyPaging<TEntity>(this IQueryable<TEntity> query, int pageIndex = 1, int pageSize = 10)
