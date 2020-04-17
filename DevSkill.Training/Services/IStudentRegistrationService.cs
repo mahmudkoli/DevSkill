@@ -15,7 +15,10 @@ namespace DevSkill.Training.Services
             int pageIndex,
             int pageSize);
 
-        Task<StudentRegistration> GetByIdAsync(int studentId, int courseId);
+        Task<StudentRegistration> GetByIdAsync(int studentId, int courseId); 
+        Task<IList<object>> GetStudentsForSelectAsync();
+        Task<IList<object>> GetCoursesForSelectAsync();
+        Task<bool> IsExistsAsync(int studentId, int courseId);
         Task AddAsync(StudentRegistration entity);
         Task UpdateAsync(StudentRegistration entity);
         Task DeleteAsync(int studentId, int courseId);

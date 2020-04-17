@@ -33,8 +33,8 @@ function ajaxCallModal(url, paramData, callback, method, obj) {
             else if (callback == 'renderCourseAddOrEditLoad') {
                 renderCourseAddOrEditLoad(response);
             } 
-            else if (callback == 'renderStudentRegAddOrEditLoad') {
-                renderStudentRegAddOrEditLoad(response);
+            else if (callback == 'renderStudentRegistrationAddOrEditLoad') {
+                renderStudentRegistrationAddOrEditLoad(response);
             }   
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {

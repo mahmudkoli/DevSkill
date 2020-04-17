@@ -36,6 +36,21 @@ namespace DevSkill.Training.Services
             return await _courseUnitOfWork.StudentRegistrationRepository.GetFirstOrDefaultAsync(x => x, x => x.StudentId == studentId && x.CourseId == courseId);
         }
 
+        public async Task<IList<object>> GetStudentsForSelectAsync()
+        {
+            return await _courseUnitOfWork.StudentRepository.GetAsync<object>(x => new { Value = x.Id.ToString(), Text = x.Name }, null, null, null, true);
+        }
+
+        public async Task<IList<object>> GetCoursesForSelectAsync()
+        {
+            return await _courseUnitOfWork.CourseRepository.GetAsync<object>(x => new { Value = x.Id.ToString(), Text = x.Title }, null, null, null, true);
+        }
+
+        public async Task<bool> IsExistsAsync(int studentId, int courseId)
+        {
+            return await _courseUnitOfWork.StudentRegistrationRepository.IsExistsAsync(x => x.StudentId == studentId && x.CourseId == courseId);
+        }
+
         public async Task AddAsync(StudentRegistration entity)
         {
             await _courseUnitOfWork.StudentRegistrationRepository.AddAsync(entity);
@@ -44,7 +59,13 @@ namespace DevSkill.Training.Services
 
         public async Task UpdateAsync(StudentRegistration entity)
         {
-            await _courseUnitOfWork.StudentRegistrationRepository.UpdateAsync(entity);
+            var updateEntity = await GetByIdAsync(entity.StudentId, entity.CourseId);
+            updateEntity.StudentId = entity.StudentId;
+            updateEntity.CourseId = entity.CourseId;
+            updateEntity.EnrollDate = entity.EnrollDate;
+            updateEntity.IsPaymentComplete = entity.IsPaymentComplete;
+
+            await _courseUnitOfWork.StudentRegistrationRepository.UpdateAsync(updateEntity);
             await _courseUnitOfWork.SaveChangesAsync();
         }
 
