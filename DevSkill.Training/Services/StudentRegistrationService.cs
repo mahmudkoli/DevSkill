@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,9 +23,16 @@ namespace DevSkill.Training.Services
         public async Task<(IList<StudentRegistration> Items, int Total, int TotalDisplay)> GetAllAsync(
             string searchText, string orderBy, int pageIndex, int pageSize)
         {
+            var columnsMap = new Dictionary<string, Expression<Func<StudentRegistration, object>>>()
+            {
+                ["enrollDate"] = v => v.EnrollDate,
+                ["studentName"] = v => v.Student.Name,
+                ["courseTitle"] = v => v.Course.Title,
+            };
+
             var result = await _courseUnitOfWork.StudentRegistrationRepository.GetAsync<StudentRegistration>(
                 x => x, x => x.Student.Name.Contains(searchText) || x.Course.Title.Contains(searchText),
-                x => IQueryableExtension.ApplyOrdering(x, orderBy),
+                x => IQueryableExtension.ApplyOrdering(x, columnsMap, orderBy),
                 x => x.Include(y => y.Student).Include(y => y.Course),
                 pageIndex, pageSize, true);
 

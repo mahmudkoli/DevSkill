@@ -32,7 +32,7 @@ namespace DevSkill.Web.Areas.Admin.Models
         {
             var result = await _courseService.GetAllAsync(
                 tableModel.SearchText, 
-                tableModel.GetSortText(new string[] { nameof(Course.Title), nameof(Course.SeatCount), nameof(Course.Fee) }), 
+                tableModel.GetSortText(new string[] { "title", "seatCount", "fee" }), 
                 tableModel.PageIndex, tableModel.PageSize);
 
             return new

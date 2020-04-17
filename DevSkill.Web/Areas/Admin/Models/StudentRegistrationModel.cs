@@ -40,7 +40,7 @@ namespace DevSkill.Web.Areas.Admin.Models
         {
             var result = await _studentRegistrationService.GetAllAsync(
                 tableModel.SearchText, 
-                tableModel.GetSortText(new string[] { nameof(StudentRegistration.EnrollDate) }), 
+                tableModel.GetSortText(new string[] { "enrollDate", "studentName", "courseTitle" }), 
                 tableModel.PageIndex, tableModel.PageSize);
 
             return new

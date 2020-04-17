@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,33 +9,57 @@ namespace DevSkill.Data.Extensions
 {
     public static class IQueryableExtension
     {
-        public static IOrderedQueryable<TEntity> ApplyOrdering<TEntity>(IQueryable<TEntity> query, string sortBy)
+        public static IOrderedQueryable<TEntity> ApplyOrdering<TEntity>(IQueryable<TEntity> query, Dictionary<string, Expression<Func<TEntity, object>>> columnsMap, string multipleSortBy)
         {
             IOrderedQueryable<TEntity> orderedQuery = (IOrderedQueryable<TEntity>)query;
-            var orderByList = sortBy.Split(',');
+            var orderByList = multipleSortBy.Split(',');
 
             if (!orderByList.Any()) return orderedQuery;
 
             var orderBy = orderByList[0];
-            var prop = typeof(TEntity).GetProperty(orderBy.Split(' ')[0]);
+            var prop = orderBy.Split(' ')[0];
 
-            if (orderBy.Split(' ')[1] == "asc")
-                orderedQuery = orderedQuery.OrderBy(x => prop.Name);
+            if (orderBy.Split(' ')[1] == "asc" && columnsMap.ContainsKey(prop))
+                orderedQuery = orderedQuery.OrderBy(columnsMap[prop]);
+            else if(columnsMap.ContainsKey(prop))
+                orderedQuery = orderedQuery.OrderByDescending(columnsMap[prop]);
             else
-                orderedQuery = orderedQuery.OrderByDescending(x => prop.Name);
+                orderedQuery = orderedQuery.OrderBy(x=> x);
 
             for (int i = 1; i < orderByList.Length; i++)
             {
                 orderBy = orderByList[i];
-                prop = typeof(TEntity).GetProperty(orderBy.Split(' ')[0]);
+                prop = orderBy.Split(' ')[0];
 
-                if (orderBy.Split(' ')[1] == "asc")
-                    orderedQuery = orderedQuery.ThenBy(x => prop.Name);
-                else
-                    orderedQuery = orderedQuery.ThenByDescending(x => prop.Name);
+                if (orderBy.Split(' ')[1] == "asc" && columnsMap.ContainsKey(prop))
+                    orderedQuery = orderedQuery.ThenBy(columnsMap[prop]);
+                else if(columnsMap.ContainsKey(prop))
+                    orderedQuery = orderedQuery.ThenByDescending(columnsMap[prop]);
             }
 
             return orderedQuery;
+        }
+
+        public static IQueryable<TEntity> ApplyOrdering<TEntity>(this IQueryable<TEntity> query, Dictionary<string, Expression<Func<TEntity, object>>> columnsMap, string sortBy, bool isAsc = true)
+        {
+            if (string.IsNullOrEmpty(sortBy) || columnsMap == null || !columnsMap.ContainsKey(sortBy))
+                return query;
+
+            if (isAsc)
+                return query.OrderBy(columnsMap[sortBy]);
+            else
+                return query.OrderByDescending(columnsMap[sortBy]);
+        }
+
+        public static IQueryable<TEntity> ApplyPaging<TEntity>(this IQueryable<TEntity> query, int pageIndex = 1, int pageSize = 10)
+        {
+            if (pageIndex <= 0)
+                pageIndex = 1;
+
+            if (pageSize <= 0)
+                pageSize = 10;
+
+            return query.Skip((pageIndex - 1) * pageSize).Take(pageSize);
         }
     }
 }

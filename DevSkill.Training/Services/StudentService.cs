@@ -23,9 +23,15 @@ namespace DevSkill.Training.Services
         public async Task<(IList<Student> Items, int Total, int TotalDisplay)> GetAllAsync(
             string searchText, string orderBy, int pageIndex, int pageSize)
         {
+            var columnsMap = new Dictionary<string, Expression<Func<Student, object>>>()
+            {
+                ["name"] = v => v.Name,
+                ["dateOfBirth"] = v => v.DateOfBirth
+            };
+
             var result = await _courseUnitOfWork.StudentRepository.GetAsync<Student>(
                 x => x, x => x.Name.Contains(searchText),
-                x => IQueryableExtension.ApplyOrdering(x, orderBy), 
+                x => IQueryableExtension.ApplyOrdering(x, columnsMap, orderBy), 
                 x => x.Include(y => y.StudentRegistrations)
                         .ThenInclude(y => y.Course), 
                 pageIndex, pageSize, true);

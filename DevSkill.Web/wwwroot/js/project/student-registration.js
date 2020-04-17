@@ -32,17 +32,19 @@ function loadDatatable(url) {
                 "targets": [0],
                 'sortable': true,
                 'searchable': false,
-                "orderData": [0]
+                "orderData": [0, 1, 2]
             },
             {
                 "targets": [1],
-                'sortable': false,
+                'sortable': true,
                 'searchable': true,
+                "orderData": [1, 0, 2]
             },
             {
                 "targets": [2],
-                'sortable': false,
+                'sortable': true,
                 'searchable': true,
+                "orderData": [2, 0, 1]
             },
             {
                 "targets": [3],
