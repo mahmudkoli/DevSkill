@@ -35,7 +35,7 @@ namespace DevSkill.Training.Services
 
         public async Task<Student> GetByIdAsync(int id)
         {
-            return await _courseUnitOfWork.StudentRepository.FirstOrDefaultAsync(x => x, x => x.Id == id);
+            return await _courseUnitOfWork.StudentRepository.GetFirstOrDefaultAsync(x => x, x => x.Id == id);
         }
 
         public async Task AddAsync(Student entity)

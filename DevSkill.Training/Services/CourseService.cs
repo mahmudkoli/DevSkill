@@ -26,7 +26,7 @@ namespace DevSkill.Training.Services
                 x => x, x => x.Title.Contains(searchText),
                 x => IQueryableExtension.ApplyOrdering(x, orderBy),
                 x => x.Include(y => y.StudentRegistrations)
-                        .ThenInclude(y => y.Course),
+                        .ThenInclude(y => y.Student),
                 pageIndex, pageSize, true);
 
             return (result.Items, result.Total, result.TotalDisplay);
@@ -34,7 +34,7 @@ namespace DevSkill.Training.Services
 
         public async Task<Course> GetByIdAsync(int id)
         {
-            return await _courseUnitOfWork.CourseRepository.FirstOrDefaultAsync(x => x, x => x.Id == id);
+            return await _courseUnitOfWork.CourseRepository.GetFirstOrDefaultAsync(x => x, x => x.Id == id);
         }
 
         public async Task AddAsync(Course entity)

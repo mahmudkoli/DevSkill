@@ -84,7 +84,7 @@ namespace DevSkill.Data
             return (result, total, totalDisplay);
         }
 
-        public virtual async Task<TResult> FirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
+        public virtual async Task<TResult> GetFirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
                             Expression<Func<TEntity, bool>> predicate = null,
                             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
                             bool disableTracking = true)
