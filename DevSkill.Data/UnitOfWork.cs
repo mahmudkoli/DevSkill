@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace DevSkill.Data
 {
-    public class UnitOfWork<TEntity> : IUnitOfWork<TEntity> where TEntity : DbContext
+    public class UnitOfWork : IUnitOfWork
     {
-        protected readonly TEntity _dbContext;
+        protected readonly DbContext _dbContext;
 
-        public UnitOfWork(string connectionString, string migrationAssemblyName)
-            => _dbContext = (TEntity)Activator.CreateInstance(typeof(TEntity), connectionString, migrationAssemblyName);
+        public UnitOfWork(DbContext dbContext) => _dbContext = dbContext;
 
         public void SaveChanges() => _dbContext?.SaveChanges();
         public Task SaveChangesAsync() => _dbContext?.SaveChangesAsync();

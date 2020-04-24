@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DevSkill.Training.Services
 {
-    public interface ICourseService
+    public interface ICourseService : IDisposable
     {
         Task<(IList<Course> Items, int Total, int TotalDisplay)> GetAllAsync(
             string searchText,

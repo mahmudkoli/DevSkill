@@ -65,5 +65,10 @@ namespace DevSkill.Training.Services
             await _courseUnitOfWork.StudentRepository.DeleteAsync(id);
             await _courseUnitOfWork.SaveChangesAsync();
         }
+
+        public void Dispose()
+        {
+            _courseUnitOfWork?.Dispose();
+        }
     }
 }

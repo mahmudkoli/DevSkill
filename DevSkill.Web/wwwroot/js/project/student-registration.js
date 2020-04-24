@@ -60,10 +60,10 @@ function loadDatatable(url) {
                 "width": "15%",
                 "className": "text-center",
                 "render": function (data, type, row, meta) {
-                    var editButton = '<a class="text-primary" onclick="add_edit_Data(\'' + data + '\')" href="#" title="Edit">' +
+                    var editButton = '<a class="text-primary" onclick="add_edit_Data(' + data + ')" href="#" title="Edit">' +
                         '<i class="icon-pencil7"></i></a>';
 
-                    var deleteButton = '<a class="text-danger" onclick="delete_Data(\'' + data + '\')" href="#" title="Delete">' +
+                    var deleteButton = '<a class="text-danger" onclick="delete_Data(' + data + ')" href="#" title="Delete">' +
                         '<i class="icon-trash"></i></a>';
 
                     return editButton + ' ' + deleteButton;

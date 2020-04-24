@@ -12,6 +12,7 @@ namespace DevSkill.Web.Areas.Admin.Models
 {
     public class StudentRegistrationModel : AdminBaseModel
     {
+        public int Id { get; set; }
         [Required]
         [Display(Name = "Student")]
         public int StudentId { get; set; }
@@ -54,19 +55,16 @@ namespace DevSkill.Web.Areas.Admin.Models
                                     item.Student.Name,
                                     item.Course.Title,
                                     item.IsPaymentComplete.ToString(),
-                                    (item.StudentId.ToString() + "," + item.CourseId.ToString())
+                                    item.Id.ToString()
                             }
                         ).ToArray()
 
             };
         }
 
-        public async Task LoadByIdAsync(string id)
+        public async Task LoadByIdAsync(int id)
         {
-            var studentId = Convert.ToInt32(id.Split(',')[0]);
-            var courseId = Convert.ToInt32(id.Split(',')[1]);
-
-            var result = await _studentRegistrationService.GetByIdAsync(studentId, courseId);
+            var result = await _studentRegistrationService.GetByIdAsync(id);
             this.StudentId = result.StudentId;
             this.CourseId = result.CourseId;
             this.EnrollDate = result.EnrollDate;
@@ -79,7 +77,7 @@ namespace DevSkill.Web.Areas.Admin.Models
             this.CourseSelectList = await _studentRegistrationService.GetCoursesForSelectAsync();
         }
 
-        public async Task AddOrUpdateAsync()
+        public async Task AddAsync()
         {
             var entity = new StudentRegistration
             {
@@ -88,18 +86,27 @@ namespace DevSkill.Web.Areas.Admin.Models
                 EnrollDate = this.EnrollDate.Value,
                 IsPaymentComplete = this.IsPaymentComplete
             };
-            var isExists = await _studentRegistrationService.IsExistsAsync(entity.StudentId, entity.CourseId);
 
-            if (isExists) await _studentRegistrationService.UpdateAsync(entity);
-            else await _studentRegistrationService.AddAsync(entity);
+            await _studentRegistrationService.AddAsync(entity);
         }
 
-        public async Task DeleteAsync(string id)
+        public async Task UpdateAsync()
         {
-            var studentId = Convert.ToInt32(id.Split(',')[0]);
-            var courseId = Convert.ToInt32(id.Split(',')[1]);
+            var entity = new StudentRegistration
+            {
+                Id = this.Id,
+                StudentId = this.StudentId,
+                CourseId = this.CourseId,
+                EnrollDate = this.EnrollDate.Value,
+                IsPaymentComplete = this.IsPaymentComplete
+            };
 
-            await _studentRegistrationService.DeleteAsync(studentId, courseId);
+            await _studentRegistrationService.UpdateAsync(entity);
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            await _studentRegistrationService.DeleteAsync(id);
         }
     }
 }

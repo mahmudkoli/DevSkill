@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DevSkill.Training.UnitOfWork
 {
-    public interface ICourseUnitOfWork : IUnitOfWork<TrainingContext>
+    public interface ICourseUnitOfWork : IUnitOfWork
     {
         IStudentRepository StudentRepository { get; set; }
         ICourseRepository CourseRepository { get; set; }

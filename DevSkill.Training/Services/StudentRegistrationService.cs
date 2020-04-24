@@ -39,9 +39,9 @@ namespace DevSkill.Training.Services
             return (result.Items, result.Total, result.TotalDisplay);
         }
 
-        public async Task<StudentRegistration> GetByIdAsync(int studentId, int courseId)
+        public async Task<StudentRegistration> GetByIdAsync(int id)
         {
-            return await _courseUnitOfWork.StudentRegistrationRepository.GetByIdAsync(studentId, courseId);
+            return await _courseUnitOfWork.StudentRegistrationRepository.GetByIdAsync(id);
         }
 
         public async Task<IList<object>> GetStudentsForSelectAsync()
@@ -54,11 +54,6 @@ namespace DevSkill.Training.Services
             return await _courseUnitOfWork.CourseRepository.GetAsync<object>(x => new { Value = x.Id.ToString(), Text = x.Title }, null, null, null, true);
         }
 
-        public async Task<bool> IsExistsAsync(int studentId, int courseId)
-        {
-            return await _courseUnitOfWork.StudentRegistrationRepository.IsExistsAsync(x => x.StudentId == studentId && x.CourseId == courseId);
-        }
-
         public async Task AddAsync(StudentRegistration entity)
         {
             await _courseUnitOfWork.StudentRegistrationRepository.AddAsync(entity);
@@ -67,7 +62,7 @@ namespace DevSkill.Training.Services
 
         public async Task UpdateAsync(StudentRegistration entity)
         {
-            var updateEntity = await GetByIdAsync(entity.StudentId, entity.CourseId);
+            var updateEntity = await GetByIdAsync(entity.Id);
             updateEntity.StudentId = entity.StudentId;
             updateEntity.CourseId = entity.CourseId;
             updateEntity.EnrollDate = entity.EnrollDate;
@@ -77,10 +72,15 @@ namespace DevSkill.Training.Services
             await _courseUnitOfWork.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int studentId, int courseId)
+        public async Task DeleteAsync(int id)
         {
-            await _courseUnitOfWork.StudentRegistrationRepository.DeleteAsync(x => x.StudentId == studentId && x.CourseId == courseId);
+            await _courseUnitOfWork.StudentRegistrationRepository.DeleteAsync(id);
             await _courseUnitOfWork.SaveChangesAsync();
+        }
+
+        public void Dispose()
+        {
+            _courseUnitOfWork?.Dispose();
         }
     }
 }

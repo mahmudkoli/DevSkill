@@ -9,12 +9,15 @@ using System.Threading.Tasks;
 
 namespace DevSkill.Data
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public abstract class Repository<TEntity, TKey, TContext>
+        : IRepository<TEntity, TKey, TContext>
+        where TEntity : class, IEntity<TKey>
+        where TContext : DbContext
     {
-        protected DbContext _dbContext;
+        protected TContext _dbContext;
         protected DbSet<TEntity> _dbSet;
 
-        public Repository(DbContext dbContext)
+        public Repository(TContext dbContext)
         {
             _dbContext = dbContext;
             _dbSet = _dbContext.Set<TEntity>();
@@ -98,9 +101,9 @@ namespace DevSkill.Data
             return result;
         }
 
-        public virtual async Task<TEntity> GetByIdAsync(params object[] ids)
+        public virtual async Task<TEntity> GetByIdAsync(TKey id)
         {
-            return await _dbSet.FindAsync(ids);
+            return await _dbSet.FindAsync(id);
         }
 
         public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filter = null)
@@ -133,7 +136,7 @@ namespace DevSkill.Data
             _dbContext.Entry(entityToUpdate).State = EntityState.Modified;
         }
 
-        public virtual async Task DeleteAsync(object id)
+        public virtual async Task DeleteAsync(TKey id)
         {
             var entityToDelete = await _dbSet.FindAsync(id);
 

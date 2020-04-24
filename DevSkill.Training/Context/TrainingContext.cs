@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DevSkill.Training.Context
 {
-    public class TrainingContext : DbContext, ITrainingContext
+    public class TrainingContext : DbContext
     {
 
         private string _connectionString;
@@ -19,10 +19,6 @@ namespace DevSkill.Training.Context
             _connectionString = connectionString;
             _migrationAssemblyName = migrationAssemblyName;
         }
-
-        public DbSet<Student> Students { get; set; }
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<StudentRegistration> StudentRegistrations { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         {
@@ -38,22 +34,11 @@ namespace DevSkill.Training.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<StudentRegistration>(stdReg =>
-            {
-                stdReg.HasKey(ur => new { ur.StudentId, ur.CourseId });
-
-                stdReg.HasOne(sc => sc.Student)
-                    .WithMany(s => s.StudentRegistrations)
-                    .HasForeignKey(sc => sc.StudentId)
-                    .IsRequired();
-
-                stdReg.HasOne(sc => sc.Course)
-                    .WithMany(c => c.StudentRegistrations)
-                    .HasForeignKey(sc => sc.CourseId)
-                    .IsRequired();
-            });
-
             base.OnModelCreating(builder);
         }
+
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<StudentRegistration> StudentRegistrations { get; set; }
     }
 }

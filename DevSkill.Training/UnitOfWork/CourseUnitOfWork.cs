@@ -9,18 +9,20 @@ using System.Threading.Tasks;
 
 namespace DevSkill.Training.UnitOfWork
 {
-    public class CourseUnitOfWork : UnitOfWork<TrainingContext>, ICourseUnitOfWork
+    public class CourseUnitOfWork : DevSkill.Data.UnitOfWork, ICourseUnitOfWork
     {
         public IStudentRepository StudentRepository { get; set; }
         public ICourseRepository CourseRepository { get; set; }
         public IStudentRegistrationRepository StudentRegistrationRepository { get; set; }
 
-        public CourseUnitOfWork(string connectionString, string migrationAssemblyName)
-            : base(connectionString, migrationAssemblyName)
+        public CourseUnitOfWork(TrainingContext dbContext,
+            IStudentRepository studentRepository,
+            ICourseRepository courseRepository,
+            IStudentRegistrationRepository studentRegistrationRepository) : base(dbContext)
         {
-            StudentRepository = new StudentRepository(_dbContext);
-            CourseRepository = new CourseRepository(_dbContext);
-            StudentRegistrationRepository = new StudentRegistrationRepository(_dbContext);
+            StudentRepository = studentRepository;
+            CourseRepository = courseRepository;
+            StudentRegistrationRepository = studentRegistrationRepository;
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DevSkill.Data
 {
-    public interface IUnitOfWork<TEntity> : IDisposable where TEntity : DbContext
+    public interface IUnitOfWork : IDisposable
     {
         void SaveChanges();
         Task SaveChangesAsync();

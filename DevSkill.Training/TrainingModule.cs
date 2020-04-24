@@ -29,14 +29,7 @@ namespace DevSkill.Training
                    .WithParameter("migrationAssemblyName", _migrationAssemblyName)
                    .InstancePerLifetimeScope();
 
-            builder.RegisterType<TrainingContext>().As<ITrainingContext>()
-                   .WithParameter("connectionString", _connectionString)
-                   .WithParameter("migrationAssemblyName", _migrationAssemblyName)
-                   .InstancePerLifetimeScope();
-
             builder.RegisterType<CourseUnitOfWork>().As<ICourseUnitOfWork>()
-                   .WithParameter("connectionString", _connectionString)
-                   .WithParameter("migrationAssemblyName", _migrationAssemblyName)
                    .InstancePerLifetimeScope();
 
             builder.RegisterType<StudentRepository>().As<IStudentRepository>()

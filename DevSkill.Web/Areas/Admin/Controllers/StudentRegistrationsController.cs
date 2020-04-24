@@ -26,15 +26,15 @@ namespace DevSkill.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddOrEdit(string id)
+        public async Task<IActionResult> AddOrEdit(int? id)
         {
             var model = new StudentRegistrationModel();
             await model.LoadAllSelectListAsync();
 
             #region for edit
-            if (!string.IsNullOrEmpty(id))
+            if (id.HasValue && id != 0)
             {
-                await model.LoadByIdAsync(id);
+                await model.LoadByIdAsync(id.Value);
             }
             #endregion
 
@@ -45,9 +45,12 @@ namespace DevSkill.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOrEdit(StudentRegistrationModel model)
         {
+            ModelState.Remove("Id");
+
             if (ModelState.IsValid)
             {
-                await model.AddOrUpdateAsync();
+                if (model.Id == null || model.Id == 0) await model.AddAsync();
+                else await model.UpdateAsync();
 
                 TempData["SuccessNotify"] = "Student Registration has been successfully saved";
                 return RedirectToAction("Index");
@@ -58,7 +61,7 @@ namespace DevSkill.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
             var model = new StudentRegistrationModel();
             await model.DeleteAsync(id);

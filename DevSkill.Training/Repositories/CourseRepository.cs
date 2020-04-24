@@ -1,4 +1,5 @@
 ﻿using DevSkill.Data;
+using DevSkill.Training.Context;
 using DevSkill.Training.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace DevSkill.Training.Repositories
 {
-    public class CourseRepository : Repository<Course>, ICourseRepository
+    public class CourseRepository : Repository<Course, int, TrainingContext>, ICourseRepository
     {
-        public CourseRepository(DbContext dbContext)
+        public CourseRepository(TrainingContext dbContext)
             : base(dbContext)
         {
 

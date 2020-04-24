@@ -1,4 +1,5 @@
 ﻿using DevSkill.Data;
+using DevSkill.Training.Context;
 using DevSkill.Training.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DevSkill.Training.Repositories
 {
-    public interface IStudentRepository : IRepository<Student>
+    public interface IStudentRepository : IRepository<Student, int, TrainingContext>
     {
         
     }
