@@ -1,0 +1,36 @@
+﻿@model IEnumerable<DevSkill.Course.Subject>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Add">Add New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Subject Name")
+            </th>
+            <th>
+                @Html.DisplayName("Registration Open")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegistrationOpen)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
