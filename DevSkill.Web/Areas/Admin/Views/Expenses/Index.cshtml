@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<!-- Page header -->
+<div class="page-header">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4><a asp-controller="Dashboard" asp-action="Index" asp-area="Admin" class="text-black-50"><i class="icon-arrow-left52 mr-2"></i> <span class="font-weight-semibold">Dashboard</span></a></h4>
+            <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+        </div>
+
+        <div class="header-elements d-none text-center text-md-left mb-3 mb-md-0">
+            <a asp-controller="Expenses" asp-action="Add" asp-area="Admin" class="btn btn-labeled btn-labeled-right bg-primary"><i class="icon-plus-circle2 mr-2"></i> <span class="font-weight-semibold">New Expense</span></a>
+        </div>
+    </div>
+</div>
+<!-- /page header -->
+<!-- Content area -->
+<div class="content pt-0">
+
+    <!-- Basic datatable -->
+    <div class="card">
+        <div class="card-header header-elements-inline">
+            <h5 class="card-title">Expense</h5>
+            <div class="header-elements">
+                <div class="list-icons">
+                    <a class="list-icons-item" data-action="collapse"></a>
+                    <a class="list-icons-item" data-action="reload"></a>
+                    <a class="list-icons-item" data-action="remove"></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <partial name="_ActionMessage" model="@Model.Response" />
+        </div>
+
+        <table class="table" id="expense-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Expense Type</th>
+                    <th>Expense Date</th>
+                    <th>Amount</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <!-- /basic datatable -->
+</div>
+
+@section Scripts {
+    <partial name="~/Views/Bundle/_SweetAlertScriptsPartial.cshtml" />
+    <partial name="~/Views/Bundle/_DatatableScriptsPartial.cshtml" />
+    <script src="~/js/project/expense.js"></script>
+    <script src="~/js/ajax-call.js"></script>
+
+    <script>
+        $(function () {
+            var url = '@Url.Action("GetExpenses", "Expenses", new { Area = "Admin" })';
+            var editUrl = '@Url.Action("Edit", "Expenses", new { Area = "Admin" })';
+            loadDatatable(url, editUrl);
+        });
+
+        function delete_Data(id) {
+            var url = '@Url.Action("Delete", "Expenses", new { Area = "Admin" })';
+            var paramData = { id: id };
+            delete_confirm(url, paramData);
+        }
+    </script>
+}
