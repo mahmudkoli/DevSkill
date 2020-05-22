@@ -22,7 +22,7 @@ namespace DevSkill.Web.Areas.Admin.Models
             return new
             {
                 recordsTotal = result.Total,
-                recordsFiltered = result.TotalDisplay,
+                recordsFiltered = result.TotalFilter,
                 data = (from item in result.Items
                         select new string[]
                         {

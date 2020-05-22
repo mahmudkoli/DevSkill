@@ -9,7 +9,7 @@ namespace DevSkill.Framework.Services
 {
     public interface IExpenseService : IDisposable
     {
-        Task<(IList<Entities.Expense> Items, int Total, int TotalDisplay)> GetAllAsync(
+        Task<(IList<Entities.Expense> Items, int Total, int TotalFilter)> GetAllAsync(
             string searchText, 
             string orderBy, 
             int pageIndex, 

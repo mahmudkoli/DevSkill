@@ -1,4 +1,4 @@
-﻿using DevSkill.Data;
+﻿using MKZeroDev.Data;
 using DevSkill.Framework.Context;
 using DevSkill.Framework.Repositories;
 using System;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DevSkill.Framework.UnitOfWork
 {
-    public class ExpenseUnitOfWork : DevSkill.Data.UnitOfWork, IExpenseUnitOfWork
+    public class ExpenseUnitOfWork : MKZeroDev.Data.UnitOfWork, IExpenseUnitOfWork
     {
         public IExpenseRepository ExpenseRepository { get; set; }
 

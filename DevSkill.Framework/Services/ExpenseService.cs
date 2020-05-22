@@ -7,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using DevSkill.Data.Extensions;
+using MKZeroDev.Data.Extensions;
 using DevSkill.Framework.Exceptions;
 
 namespace DevSkill.Framework.Services
@@ -21,7 +21,7 @@ namespace DevSkill.Framework.Services
             _courseUnitOfWork = courseUnitOfWork;
         }
 
-        public async Task<(IList<Entities.Expense> Items, int Total, int TotalDisplay)> GetAllAsync(
+        public async Task<(IList<Entities.Expense> Items, int Total, int TotalFilter)> GetAllAsync(
             string searchText, string orderBy, int pageIndex, int pageSize)
         {
             var columnsMap = new Dictionary<string, Expression<Func<Entities.Expense, object>>>()
@@ -37,7 +37,7 @@ namespace DevSkill.Framework.Services
                 x => x.ApplyOrdering(columnsMap, orderBy), null, 
                 pageIndex, pageSize, true);
 
-            return (result.Items, result.Total, result.TotalDisplay);
+            return (result.Items, result.Total, result.TotalFilter);
         }
 
         public async Task<Entities.Expense> GetByIdAsync(int id)
