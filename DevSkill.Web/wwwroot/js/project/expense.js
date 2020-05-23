@@ -62,7 +62,7 @@ function loadDatatable(url, editUrl) {
                     var editButton = '<a class="text-primary" href="' + editUrl + '/'+ data +'" title="Edit">' +
                         '<i class="icon-pencil7"></i></a>';
 
-                    var deleteButton = '<a class="text-danger" onclick="delete_Data(' + data + ')" href="#" title="Delete">' +
+                    var deleteButton = '<a class="text-danger show-bs-modal" data-id="'+ data +'" href="#" title="Delete">' +
                         '<i class="icon-trash"></i></a>';
 
                     return editButton + ' ' + deleteButton;

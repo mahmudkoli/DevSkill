@@ -8,7 +8,6 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["DevSkill.Web/DevSkill.Web.csproj", "DevSkill.Web/"]
 COPY ["DevSkill.Framework/DevSkill.Framework.csproj", "DevSkill.Framework/"]
-COPY ["DevSkill.Data/DevSkill.Data.csproj", "DevSkill.Data/"]
 RUN dotnet restore "DevSkill.Web/DevSkill.Web.csproj"
 COPY . .
 WORKDIR "/src/DevSkill.Web"

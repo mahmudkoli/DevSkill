@@ -100,11 +100,24 @@ namespace DevSkill.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var model = new ExpenseModel();
-            await model.DeleteAsync(id);
-            return Json(true);
+            if (ModelState.IsValid)
+            {
+                var model = new ExpenseModel();
+                try
+                {
+                    var title = await model.DeleteAsync(id);
+                    model.Response = new ResponseModel($"Expense {title} successfully deleted.", ResponseType.Success);
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    model.Response = new ResponseModel("Expense delete failured.", ResponseType.Failure);
+                }
+            }
+            return RedirectToAction("index");
         }
 
         public async Task<IActionResult> GetExpenses()

@@ -23,13 +23,13 @@ namespace DevSkill.Web.Areas.Admin.Models
         {
             if (type == ResponseType.Success)
             {
-                IconCssClass = "fa-check";
+                IconCssClass = "icon-checkmark4";
                 StyleCssClass = "alert-success";
                 Title = "Success!";
             }
             else if (type == ResponseType.Failure)
             {
-                IconCssClass = "fa-ban";
+                IconCssClass = "icon-blocked";
                 StyleCssClass = "alert-danger";
                 Title = "Error!";
             }
