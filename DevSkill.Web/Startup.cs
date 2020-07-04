@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
-using DevSkill.Web.Data;
+//using DevSkill.Web.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,6 +16,9 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using DevSkill.Framework.Context;
 using DevSkill.Framework;
+using DevSkill.Membership.Entities;
+using DevSkill.Membership.Services;
+using DevSkill.Membership.Contexts;
 
 namespace DevSkill.Web
 {
@@ -50,36 +53,48 @@ namespace DevSkill.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-
             var connectionStringName = "DefaultConnection";
             var connectionString = Configuration.GetConnectionString(connectionStringName);
             var migrationAssemblyName = typeof(Startup).Assembly.FullName;
 
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString, b => b.MigrationsAssembly(migrationAssemblyName)));
+
             services.AddDbContext<FrameworkContext>(options =>
                 options.UseSqlServer(connectionString, b => b.MigrationsAssembly(migrationAssemblyName)));
 
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders()
+                .AddUserManager<ApplicationUserManager>()
+                .AddRoleManager<ApplicationRoleManager>()
+                .AddSignInManager<ApplicationSignInManager>();
 
             services.Configure<IdentityOptions>(options =>
             {
-                // Default Password settings.
+                // Password settings.
                 options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 5;
-                options.Password.RequiredUniqueChars = 0;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
 
-                // SignIn settings
-                //options.SignIn.RequireConfirmedAccount = true;
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = false;
             });
 
             services.ConfigureApplicationCookie(options =>
             {
+                options.AccessDeniedPath = "/Account/AccessDenied";
                 options.LoginPath = "/Account/Login";
             });
 

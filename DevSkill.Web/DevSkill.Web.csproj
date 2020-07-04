@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DevSkill.Framework\DevSkill.Framework.csproj" />
+    <ProjectReference Include="..\DevSkill.Membership\DevSkill.Membership.csproj" />
   </ItemGroup>
 
 </Project>

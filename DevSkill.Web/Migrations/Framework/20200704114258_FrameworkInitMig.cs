@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace DevSkill.Web.Migrations
+namespace DevSkill.Web.Migrations.Framework
 {
-    public partial class initMig : Migration
+    public partial class FrameworkInitMig : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

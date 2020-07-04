@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 namespace DevSkill.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ExpensesController : Controller
     {
         private readonly ILogger<ExpensesController> _logger;

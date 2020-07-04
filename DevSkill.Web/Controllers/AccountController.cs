@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using DevSkill.Membership.Entities;
+using DevSkill.Membership.Services;
 using DevSkill.Web.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -16,14 +18,14 @@ namespace DevSkill.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ApplicationUserManager _userManager;
+        private readonly ApplicationSignInManager _signInManager;
         private readonly ILogger<AccountController> _logger;
         private readonly IEmailSender _emailSender;
 
-        public AccountController(SignInManager<IdentityUser> signInManager,
+        public AccountController(ApplicationSignInManager signInManager,
             ILogger<AccountController> logger,
-            UserManager<IdentityUser> userManager,
+            ApplicationUserManager userManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -104,11 +106,14 @@ namespace DevSkill.Web.Controllers
             ViewData["ExternalLogins"] = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    await _userManager.AddToRoleAsync(user, "Admin");
+                    //await _userManager.AddToRoleAsync(user, "Manager");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -142,6 +147,15 @@ namespace DevSkill.Web.Controllers
 
             // If we got this far, something failed, redisplay form
             //return Page();
+
+            return View();
+        }
+
+        public async Task<IActionResult> AccessDeniedAsync(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+
+            ViewData["ExternalLogins"] = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             return View();
         }
