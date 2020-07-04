@@ -6,12 +6,14 @@ using Autofac;
 using DevSkill.Framework.Exceptions;
 using DevSkill.Web.Areas.Admin.Enums;
 using DevSkill.Web.Areas.Admin.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace DevSkill.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class ExpensesController : Controller
     {
         private readonly ILogger<ExpensesController> _logger;
